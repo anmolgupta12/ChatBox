@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Message Box</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./CSS/main.css">
+    </head>
+    <body>
+        
+        <div id="displayBox" >
+            <p id="msg"></p>
+            
+        </div>
+        <form id="chat-form">
+            
+            
+            <input Id="message" type="text" placeholder="Enter message" name="message" autofocus/>
+            <input class="button" type="button" value="Send" onclick="sendMsg()"/>
+            <!--<button name="sendMsg" value="send">Send</button>-->
+        </form>
+        
+        
+        <script>
+            var message;
+
+             function sendMsg(){
+                 
+                 message = document.getElementById("message").value;
+                 document.getElementById('message').value='';
+                 readMsg();
+                
+            }
+            function readMsg(){
+                
+                displayMsg();
+            }
+            function displayMsg(){
+                console.log(message);
+                document.getElementById("msg").innerHTML = message;
+                
+            }
+            
+        </script>
+        
+    </body>
+</html>

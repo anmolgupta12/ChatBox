@@ -1,0 +1,16 @@
+{
+    "name": "ChatBox",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "anmol.gupta",
+    "contributors": [],
+    "dependencies": {
+        "express": "4.16.4"
+    }
+}
