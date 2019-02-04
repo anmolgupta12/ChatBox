@@ -2,47 +2,67 @@
 
 <html>
     <head>
-        <title>Message Box</title>
+        <title>Chatter Box</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="./CSS/main.css">
+        <link rel="stylesheet" type="text/css" href="/loadcss">
     </head>
     <body>
-        
-        <div id="displayBox" >
-            <p id="msg"></p>
-            
+
+        <div id="displayBox" onload="scrollToBottom()">
+            <ul id="msg" style="list-style-type: none;"></ul>
+        </div>
+        <div id="userBox">
+            <dl id="userList"></dl>
         </div>
         <form id="chat-form">
-            
-            
-            <input Id="message" type="text" placeholder="Enter message" name="message" autofocus/>
-            <input class="button" type="button" value="Send" onclick="sendMsg()"/>
-            <!--<button name="sendMsg" value="send">Send</button>-->
+            <input Id="message" type="text" placeholder="Enter message" autofocus/>
+            <input id="send" class="button" type="button" value="Send" onclick="sendMsg()"/>
         </form>
-        
-        
-        <script>
-            var message;
 
-             function sendMsg(){
-                 
-                 message = document.getElementById("message").value;
-                 document.getElementById('message').value='';
-                 readMsg();
-                
-            }
-            function readMsg(){
-                
-                displayMsg();
-            }
-            function displayMsg(){
-                console.log(message);
-                document.getElementById("msg").innerHTML = message;
-                
-            }
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            document.getElementById("message").addEventListener('keypress', function(e){
+//                e.preventDefault();
+                if(e.keyCode === 13){
+                    e.preventDefault();
+                    document.getElementById("send").click();
+                }
+            });
             
+                var socket = io();
+                function sendMsg() {
+                    let sendObject = '{"senderName" : "'+window.location.search+'", "message" : "'+document.getElementById("message").value+'" }';
+                    socket.emit('chat message', sendObject);
+                    document.getElementById("message").value = '';
+                }
+                
+                socket.on('chat message', function (msg) {
+                    let dt = document.createElement("dt");
+                    dt.appendChild(document.createTextNode(msg['senderName']+" : "));
+                    let dd = document.createElement("dd");
+                    dd.appendChild(document.createTextNode(msg['message']));
+                    document.getElementById("msg").appendChild(dt);
+                    document.getElementById("msg").appendChild(dd);
+                });
+                
+                socket.on('user-name', function (userList){
+                    console.log(userList);
+                    document.getElementById("userList").innerHTML='';
+                    userList.forEach((userName)=>{
+                        let li1 = document.createElement("li");
+                        li1.appendChild(document.createTextNode(userName));
+                        document.getElementById("userList").appendChild(li1);
+                    });
+                });
+                
+                document.getElementById("msg").scrollIntoView();
+//                function scrollToBottom(){
+//                    console.log("HI : ");
+//                    let objDiv = document.getElementById("msg");
+//                    objDiv.scrollTop = objDiv.scrollHeight-objDiv.clientHeight;
+//                }
         </script>
-        
+
     </body>
 </html>
